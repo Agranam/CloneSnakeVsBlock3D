@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    [SerializeField] private Transform _target;
-    [SerializeField] private float _speedMoving = 2f;
+    [SerializeField] private Transform target;
+    [SerializeField] private float speedMoving = 2f;
 
     void Update()
     {
-        transform.position = Vector3.Lerp(_target.position, transform.position, _speedMoving * Time.deltaTime);
+        Vector3 transformPosition = Vector3.Lerp(target.position, transform.position, speedMoving * Time.deltaTime);
+        transform.position = new Vector3(0f, transform.position.y, transformPosition.z);
     }
 }
