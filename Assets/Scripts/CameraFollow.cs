@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[ExecuteAlways]
 public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Transform target;
@@ -8,6 +9,6 @@ public class CameraFollow : MonoBehaviour
     void Update()
     {
         Vector3 transformPosition = Vector3.Lerp(target.position, transform.position, speedMoving * Time.deltaTime);
-        transform.position = new Vector3(0f, transform.position.y, transformPosition.z);
+        transform.position = new Vector3(0f, transformPosition.y, transformPosition.z);
     }
 }

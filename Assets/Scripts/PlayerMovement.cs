@@ -1,55 +1,64 @@
 using UnityEngine;
 
-public enum State
+public enum PlayerState
 {
     Moving,
     Stay,
 }
 public class PlayerMovement : MonoBehaviour
 {
-    public State CurrentState;
-    [SerializeField] private float sensity;
-    [Range(0f, 10f)]
-    [SerializeField] private float speedMoving;
-    [Range(0f, 1f)]
-    [SerializeField] private float timeScale;
-    [SerializeField] private new Camera camera;
-    private float _sidewaysSpeed;
+    public PlayerState CurrentPlayerState { get; private set; }
+    [SerializeField] private float _sensity;
+    [Range(0f, 10f)] [SerializeField] private float _speedMoving;
+    [SerializeField] private Camera _camera;
+    [SerializeField] private Rigidbody _rigidbody;
+    
+    private float _sidewaysSpeed1;
     private Vector3 _touchLastPos;
+    private float _sidewaysSpeed;
 
     private void Update()
     {
-        Time.timeScale = timeScale;
-        transform.position += Vector3.forward * (Time.deltaTime * speedMoving);
         PcControl();
-        if (CurrentState == State.Stay)
+        if (CurrentPlayerState == PlayerState.Stay)
         {
-            speedMoving = 0;
-            CurrentState = State.Stay;
+            _speedMoving = 0;
+            CurrentPlayerState = PlayerState.Stay;
         }
-        if (CurrentState == State.Moving)
+        if (CurrentPlayerState == PlayerState.Moving)
         {
-            speedMoving = 5;
-            CurrentState = State.Moving;
+            _speedMoving = 5;
+            CurrentPlayerState = PlayerState.Moving;
         }
     }
 
-    public void SetState(State currentState)
+    public void SetState(PlayerState currentState)
     {
-        CurrentState = currentState;
+        CurrentPlayerState = currentState;
     }
+
     private void PcControl()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            _touchLastPos = camera.ScreenToViewportPoint(Input.mousePosition);
+            _touchLastPos = _camera.ScreenToViewportPoint(Input.mousePosition);
         }
-        
-        if (Input.GetMouseButton(0))
-        {       
-            Vector3 delta = camera.ScreenToViewportPoint(Input.mousePosition) - _touchLastPos;
-            transform.position = new Vector3(delta.x * sensity, 0, transform.position.z);
+        else if (Input.GetMouseButtonUp(0))
+        {
+            _sidewaysSpeed = 0;
+        }
+        else if (Input.GetMouseButton(0))
+        {
+            Vector3 delta = _camera.ScreenToViewportPoint(Input.mousePosition) - _touchLastPos;
+            _sidewaysSpeed += delta.x * _sensity;
+            _touchLastPos = _camera.ScreenToViewportPoint(Input.mousePosition);
         }
     }
-
+    
+    private void FixedUpdate()
+    {
+        if (Mathf.Abs(_sidewaysSpeed) > 4) _sidewaysSpeed = 4 * Mathf.Sign(_sidewaysSpeed);
+        _rigidbody.velocity = new Vector3(_sidewaysSpeed * 5, 0f, _speedMoving);
+        _sidewaysSpeed = 0;
+    }
 }

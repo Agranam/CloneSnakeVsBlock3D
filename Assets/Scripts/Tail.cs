@@ -1,10 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class Tail : MonoBehaviour
 {
+    public float AnimationDuration;
     [SerializeField] private int startCountCircles;
     [SerializeField] private float circleDiameter;
     [SerializeField] private Transform snakeHead;
@@ -12,6 +13,7 @@ public class Tail : MonoBehaviour
 
     private int _cellsCount;
     private float _distance;
+    private Transform _removableCell;
     [SerializeField] private List<Transform> _snakeCircles = new List<Transform>();
     [SerializeField] private List<Vector3> _positions = new List<Vector3>();
 
@@ -30,7 +32,7 @@ public class Tail : MonoBehaviour
         _distance = (snakeHead.position - _positions[0]).magnitude;
         if (_distance > circleDiameter)
             Position();
-        if (playerMovement.CurrentState == State.Moving)
+        if (playerMovement.CurrentPlayerState == PlayerState.Moving)
         {
             MovingCircles();
         }
@@ -52,6 +54,7 @@ public class Tail : MonoBehaviour
             _snakeCircles[i].position = Vector3.Lerp(_positions[i + 1], _positions[i], _distance / circleDiameter);
         }
     }
+
     public void NormalizePosition()
     {
         for (int i = 1; i < _positions.Count; i++)  
@@ -65,55 +68,42 @@ public class Tail : MonoBehaviour
     {
         for (int i = 0; i < countCircles; i++)
         {
+            Quaternion setRotation = Quaternion.Euler
+                (Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
             Transform circle = Instantiate(snakeHead, _positions[^1],
-                Quaternion.identity, transform);
+                setRotation, transform);
             _snakeCircles.Add(circle);
             _positions.Add(circle.position);
         }
     }
 
-    public void RemoveCircle(int countRemoveCircles)
+    public void RemoveCell(int countRemoveCell, Vector3 targetPosition)
     {
-        StartCoroutine(WaitingEndOfMoving(countRemoveCircles));
-    }
-
-    private IEnumerator WaitingEndOfMoving(int count)
-    {
-        for (int a = 0; a < count; a++)
+        Sequence sequence = DOTween.Sequence();
+        
+        for (int i = 0; i < countRemoveCell; i++)
         {
-            DeleteCircle();
-
-            yield return StartCoroutine(MovementCycle());
+            sequence.Append(_snakeCircles[i].DOJump(targetPosition, 2, 1,AnimationDuration));
+            sequence.AppendCallback(DeleteCell);
+            sequence.AppendInterval(AnimationDuration);
         }
-
-        _distance = circleDiameter;
     }
-
-    private void DeleteCircle()
+    
+    private void DeleteCell()
     {
-        Destroy(_snakeCircles[0].gameObject);
-        Position();
+        _removableCell = _snakeCircles[0];
+        Invoke("DestroyCell", AnimationDuration);
+
         _snakeCircles.RemoveAt(0);
-        _positions.RemoveAt(1);
-    }
-
-    private IEnumerator MovementCycle()
-    {
+        _positions.RemoveAt(_positions.Count - 1);
         for (int i = 0; i < _snakeCircles.Count; i++)
         {
-            StartCoroutine(SmoothMoving(i, 4f));
-            
+            _snakeCircles[i].DOMove(_positions[i + 1], AnimationDuration, false);
         }
-        yield return new WaitForSeconds(0.25f);
     }
 
-    private IEnumerator SmoothMoving(int index, float time)
+    private void DestroyCell()
     {
-        for (float t = 1; t > 0; t -= Time.deltaTime * time)
-        {
-            Vector3 position = _positions[index + 1];
-            _snakeCircles[index].position = Vector3.Lerp(position, position - Vector3.forward, t);
-            yield return null;
-        }
+        Destroy(_removableCell.gameObject);
     }
 }
