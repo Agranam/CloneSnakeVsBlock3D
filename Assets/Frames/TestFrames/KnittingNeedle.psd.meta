@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 236325655673c9d42a2086224e153324
+guid: 06414c00326176947a1b27eba45edc96
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -125,7 +125,10 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      KnittingNeedle_1: -1911948866
+      KnittingNeedle_2: 2022359467
+      KnittingNeedle_0: -475329785
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 1

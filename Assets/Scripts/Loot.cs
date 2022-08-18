@@ -23,7 +23,11 @@ public class Loot : MonoBehaviour
             DestroyBlock();
         }
     }
-    
+    public void SetNumberOfCells(int numberOfCells)
+    {
+        _numberOfCells = numberOfCells;
+    }
+
     private void CalculateColor()
     {
         SetColor(_color1, _color2, _minValue, _maxValue);

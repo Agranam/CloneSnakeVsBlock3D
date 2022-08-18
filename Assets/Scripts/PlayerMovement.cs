@@ -23,10 +23,12 @@ public class PlayerMovement : MonoBehaviour
         if (CurrentPlayerState == PlayerState.Stay)
         {
             _speedMoving = 0;
+            _rigidbody.isKinematic = true;
             CurrentPlayerState = PlayerState.Stay;
         }
         if (CurrentPlayerState == PlayerState.Moving)
         {
+            _rigidbody.isKinematic = false;
             _speedMoving = 5;
             CurrentPlayerState = PlayerState.Moving;
         }
@@ -57,6 +59,8 @@ public class PlayerMovement : MonoBehaviour
     
     private void FixedUpdate()
     {
+        if (CurrentPlayerState == PlayerState.Stay) return;
+        
         if (Mathf.Abs(_sidewaysSpeed) > 4) _sidewaysSpeed = 4 * Mathf.Sign(_sidewaysSpeed);
         _rigidbody.velocity = new Vector3(_sidewaysSpeed * 5, 0f, _speedMoving);
         _sidewaysSpeed = 0;

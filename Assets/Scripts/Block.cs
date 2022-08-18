@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class Block : MonoBehaviour
 {
-    [SerializeField] private int _blockCount;
+    public int BlockCount { get; private set; }
     [SerializeField] private Color[] _colors;
     [SerializeField] private TextMeshPro _textBlockCount;
     [SerializeField] private Renderer _renderer;
     
     [SerializeField] private PlayerMovement _playerMovement;
 
+    public bool _isActive { get; private set; } = false;
+    
     private void Start()
     {
         UpdateProperties();
@@ -18,41 +20,56 @@ public class Block : MonoBehaviour
 
     public void SetBlockCount(int blockCount)
     {
-        _blockCount = blockCount;
+        BlockCount = blockCount;
+    }
+    public void SubtractBlockCount()
+    {
+        BlockCount -= 1;
+        UpdateProperties();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if(!this.enabled) return;
         if (collision.collider.TryGetComponent(out PlayerMovement playerMovement))
         {
+            DisabledBlocks();
             _playerMovement = playerMovement;
             _playerMovement.SetState(PlayerState.Stay);
             Tail tail = collision.collider.GetComponentInChildren<Tail>();
+            tail.SelectBlock(this);
             tail.NormalizePosition();
-            tail.RemoveCell(_blockCount, _renderer.transform.position);
+            tail.RemoveCell(BlockCount, _renderer.transform.position);
             float delay = tail.AnimationDuration * 2;
-            Invoke("DestroyBlock", _blockCount * delay);
+            Invoke("DestroyBlock", BlockCount * delay);
         }
     }
-    
+
+    private void DisabledBlocks()
+    {
+        RowBlockGenerator rowBlockGenerator = GetComponentInParent<RowBlockGenerator>();
+        _isActive = true;
+        rowBlockGenerator.DisabledBlock();
+    }
+
     private void CalculateColor()
     {
-        switch (_blockCount)
+        switch (BlockCount)
         {
             case < 11:
-                SetColor(_colors[0], _colors[1], _blockCount);
+                SetColor(_colors[0], _colors[1], BlockCount);
                 break;
             case < 21:
-                SetColor(_colors[1], _colors[2], _blockCount - 10);
+                SetColor(_colors[1], _colors[2], BlockCount - 10);
                 break;
             case < 31:
-                SetColor(_colors[2], _colors[3], _blockCount - 20);
+                SetColor(_colors[2], _colors[3], BlockCount - 20);
                 break;
             case < 41:
-                SetColor(_colors[3], _colors[4], _blockCount - 30);
+                SetColor(_colors[3], _colors[4], BlockCount - 30);
                 break;
             case < 51:
-                SetColor(_colors[4], _colors[5], _blockCount - 40);
+                SetColor(_colors[4], _colors[5], BlockCount - 40);
                 break;
         }
     }
@@ -76,7 +93,7 @@ public class Block : MonoBehaviour
 
     private void UpdateTextValue()
     {
-        _textBlockCount.text = _blockCount.ToString();
+        _textBlockCount.text = BlockCount.ToString();
     }
     
     [ContextMenu("Update properties")]

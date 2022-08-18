@@ -1,14 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private Tail tail;
+    [SerializeField] private Tail _tail;
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            tail.AddCircle(1);
+            _tail.AddCircle(1);
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
