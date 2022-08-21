@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private Tail _tail;
+    [SerializeField] private TailMovement tailMovement;
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            _tail.AddCircle(1);
+            tailMovement.AddCell(1);
         }
         if (Input.GetKeyDown(KeyCode.D))
         {

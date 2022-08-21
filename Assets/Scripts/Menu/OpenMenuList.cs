@@ -9,6 +9,7 @@ namespace Menu
     {
         [SerializeField] private float _duration = 2f;
         [SerializeField] private Vector2 _newImageSize = new Vector2(900f, 50f);
+        [SerializeField] private SoundsEffects _soundsEffects;
         [SerializeField] private RectTransform _topKnittingNeedle;
         [SerializeField] private RectTransform _botKnittingNeedle;
         [SerializeField] private Transform _topPosition;
@@ -31,12 +32,13 @@ namespace Menu
         public void SetPosition()
         {
             SavePositions();
+            PlaySound();
             _botKnittingNeedleImage.enabled = true;
-            Move(_topKnittingNeedle, _topPosition.position, _duration);
-            Move(_botKnittingNeedle, _botPosition.position, _duration);
-
-            Resize(_topKnittingNeedle, _newImageSize, _duration);
-            Resize(_botKnittingNeedle, _newImageSize, _duration);
+            _topKnittingNeedle.DOMove(_topPosition.position, _duration);
+            _botKnittingNeedle.DOMove(_botPosition.position, _duration);
+            
+            _topKnittingNeedle.DOSizeDelta(_newImageSize, _duration);
+            _botKnittingNeedle.DOSizeDelta(_newImageSize, _duration);
         }
 
         public void ShowMenu()
@@ -71,7 +73,7 @@ namespace Menu
             }
         }
         
-        public void HideMenu()
+        public void SlowHideMenu()
         {
             foreach (var textMeshProUGUI in _menuTextMP)
             {
@@ -99,25 +101,13 @@ namespace Menu
             seq.Join(_topKnittingNeedle.DOSizeDelta(_originalImageSize, _duration));
             seq.Join(_botKnittingNeedle.DOSizeDelta(_originalImageSize, _duration));
             
-            // seq.AppendCallback(Move(_topKnittingNeedle, _originalKnittingNeedlePosition, _duration));
-            // seq.AppendCallback(Move(_botKnittingNeedle, _originalKnittingNeedlePosition, _duration));
-            //
-            // seq.AppendCallback(Resize(_topKnittingNeedle, _originalImageSize, _duration));
-            // seq.AppendCallback(Resize(_botKnittingNeedle, _originalImageSize, _duration));
-            
-            Invoke("DisabledImage", _duration + 1);
+            Invoke(nameof(PlaySound), 1);
+            Invoke(nameof(DisabledImage), _duration + 1);
         }
 
-        private TweenCallback Move(Transform selectedTransform, Vector3 targetPosition, float duration)
+        private void PlaySound()
         {
-            selectedTransform.DOMove(targetPosition, duration, false);
-            return null;
-        }
-
-        private TweenCallback Resize(RectTransform rectTransform, Vector2 newSize, float duration)
-        {
-            rectTransform.DOSizeDelta(newSize, duration, false);
-            return null;
+            _soundsEffects.OpenMenu();
         }
         
         private void SavePositions()

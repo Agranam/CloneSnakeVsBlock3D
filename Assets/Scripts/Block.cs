@@ -36,11 +36,11 @@ public class Block : MonoBehaviour
             DisabledBlocks();
             _playerMovement = playerMovement;
             _playerMovement.SetState(PlayerState.Stay);
-            Tail tail = collision.collider.GetComponentInChildren<Tail>();
-            tail.SelectBlock(this);
-            tail.NormalizePosition();
-            tail.RemoveCell(BlockCount, _renderer.transform.position);
-            float delay = tail.AnimationDuration * 2;
+            TailMovement tailMovement = collision.collider.GetComponentInChildren<TailMovement>();
+            tailMovement.SelectBlock(this);
+            tailMovement.NormalizePosition();
+            tailMovement.RemoveCell(BlockCount, _renderer.transform.position);
+            float delay = tailMovement.AnimationDuration * 2;
             Invoke("DestroyBlock", BlockCount * delay);
         }
     }
@@ -88,7 +88,7 @@ public class Block : MonoBehaviour
     private void OnDestroy()
     {
         if (_playerMovement)
-            _playerMovement.SetState(PlayerState.Moving);
+            _playerMovement.SetState(PlayerState.MovingInGame);
     }
 
     private void UpdateTextValue()

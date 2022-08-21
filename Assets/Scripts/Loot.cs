@@ -16,10 +16,10 @@ public class Loot : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.GetComponentInChildren<Tail>())
+        if(other.GetComponentInChildren<TailMovement>())
         {
-            Tail tail = other.GetComponentInChildren<Tail>();
-            tail.AddCircle(_numberOfCells);
+            TailMovement tailMovement = other.GetComponentInChildren<TailMovement>();
+            tailMovement.AddCell(_numberOfCells);
             DestroyBlock();
         }
     }

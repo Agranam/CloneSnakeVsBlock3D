@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class RowBlockGenerator : MonoBehaviour
 {
@@ -27,10 +25,10 @@ public class RowBlockGenerator : MonoBehaviour
     {
         for (int i = 0; i < 6; i++)
         {
-            _blockValue.Add(Random.Range(1, 51));
+            _blockValue.Add(Random.Range(1, 5));
         }
 
-        ChangeDifficulty(lootValue, 1);
+        ChangeDifficulty(lootValue, 0);
     }
 
     private void ChangeDifficulty(int lootValue, int difficulty) // 0 - Easy, 1 - Normal, 2 - Hard.
