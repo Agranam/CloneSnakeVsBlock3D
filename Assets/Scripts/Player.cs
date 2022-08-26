@@ -1,19 +1,26 @@
-﻿using System;
+﻿using Menu;
+using ScriptableObjects;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private TailMovement tailMovement;
+    [SerializeField] private TailManagment _tailManagment;
+    [SerializeField] private Renderer[] _playerRenderers;
+    [SerializeField] private MaterialsList _payerMaterialsList;
 
-    private void Update()
+    private Renderer[] _tailCells;
+    
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        int currentPlayerSkin = SkinsMenu.CurrentPlayerColor;
+        for (int i = 0; i < _playerRenderers.Length; i++)
         {
-            tailMovement.AddCell(1);
+            _playerRenderers[i].material.color = _payerMaterialsList.playerColors[currentPlayerSkin];
         }
-        if (Input.GetKeyDown(KeyCode.D))
+        _tailCells = _tailManagment.GetComponentsInChildren<Renderer>();
+        for (int i = 0; i < _tailCells.Length; i++)
         {
-            //tail.RemoveCircle();
+            _tailCells[i].material.color = _payerMaterialsList.playerColors[currentPlayerSkin];
         }
     }
 }

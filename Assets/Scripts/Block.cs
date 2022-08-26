@@ -1,17 +1,16 @@
-using System;
 using TMPro;
 using UnityEngine;
 
 public class Block : MonoBehaviour
 {
-    public int BlockCount { get; private set; }
     [SerializeField] private Color[] _colors;
     [SerializeField] private TextMeshPro _textBlockCount;
     [SerializeField] private Renderer _renderer;
     
-    [SerializeField] private PlayerMovement _playerMovement;
-
-    public bool _isActive { get; private set; } = false;
+    private PlayerMovement _playerMovement;
+    
+    public int BlockCount { get; private set; }
+    public bool IsActive { get; private set; } = false;
     
     private void Start()
     {
@@ -36,19 +35,23 @@ public class Block : MonoBehaviour
             DisabledBlocks();
             _playerMovement = playerMovement;
             _playerMovement.SetState(PlayerState.Stay);
-            TailMovement tailMovement = collision.collider.GetComponentInChildren<TailMovement>();
-            tailMovement.SelectBlock(this);
-            tailMovement.NormalizePosition();
-            tailMovement.RemoveCell(BlockCount, _renderer.transform.position);
-            float delay = tailMovement.AnimationDuration * 2;
-            Invoke("DestroyBlock", BlockCount * delay);
+            TailManagment tailManagment = collision.collider.GetComponentInChildren<TailManagment>();
+            
+            DeleteTailCell(tailManagment);
         }
+    }
+
+    private void DeleteTailCell(TailManagment tailManagment)
+    {
+        tailManagment.SelectBlock(this);
+        tailManagment.NormalizePosition();
+        tailManagment.RemoveCell(BlockCount, _renderer.transform.position);
     }
 
     private void DisabledBlocks()
     {
         RowBlockGenerator rowBlockGenerator = GetComponentInParent<RowBlockGenerator>();
-        _isActive = true;
+        IsActive = true;
         rowBlockGenerator.DisabledBlock();
     }
 
@@ -80,14 +83,9 @@ public class Block : MonoBehaviour
         _renderer.material.color = Color.Lerp(color1, color2, mediumColor);
     }
     
-    private void DestroyBlock()
-    {
-        Destroy(gameObject);
-    }
-
     private void OnDestroy()
     {
-        if (_playerMovement)
+        if (_playerMovement && _playerMovement.CurrentPlayerState == PlayerState.Stay)
             _playerMovement.SetState(PlayerState.MovingInGame);
     }
 
@@ -96,7 +94,6 @@ public class Block : MonoBehaviour
         _textBlockCount.text = BlockCount.ToString();
     }
     
-    [ContextMenu("Update properties")]
     private void UpdateProperties()
     {
         UpdateTextValue();

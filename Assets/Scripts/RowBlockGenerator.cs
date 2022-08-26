@@ -81,8 +81,8 @@ public class RowBlockGenerator : MonoBehaviour
     {
         for (int i = 0; i < _rowOfBlocks.Count; i++)
         {
-            _rowOfBlocks[i].enabled = _rowOfBlocks[i]._isActive == true ? true : false;
-            _rowOfColliders[i].enabled = _rowOfBlocks[i]._isActive == true ? true : false;
+            _rowOfBlocks[i].enabled = _rowOfBlocks[i].IsActive == true ? true : false;
+            _rowOfColliders[i].enabled = _rowOfBlocks[i].IsActive == true ? true : false;
         }
     }
 }

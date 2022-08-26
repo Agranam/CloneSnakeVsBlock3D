@@ -6,6 +6,7 @@ public enum PlayerState
     MovingInBackground,
     MovingInGame,
     Stay,
+    Died,
 }
 public class PlayerMovement : MonoBehaviour
 {
@@ -62,6 +63,10 @@ public class PlayerMovement : MonoBehaviour
                 {
                     _currentSpeedMoving = _gameSpeedMoving;
                 }
+                break;
+            case PlayerState.Died:
+                _currentSpeedMoving = 0;
+                _rigidbody.isKinematic = true;
                 break;
         }
     }

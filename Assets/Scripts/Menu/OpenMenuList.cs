@@ -24,6 +24,8 @@ namespace Menu
 
         private void Awake()
         {
+            _menuTextMP = _menu.GetComponentsInChildren<TextMeshProUGUI>();
+            _menuImages = _menu.GetComponentsInChildren<Image>();
             FastHideMenu();
             SavePositions();
             DisabledImage();
