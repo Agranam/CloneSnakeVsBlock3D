@@ -1,24 +1,9 @@
-using DG.Tweening;
-using Menu;
-using SaveLoadSystem;
-using ScriptableObjects;
 using UnityEngine;
 
 public class SnakeCell : MonoBehaviour
 {
-    [SerializeField] private Renderer _snakeCell;
-    [SerializeField] private MaterialsList _payerMaterialsList;
-    [SerializeField] private float _duration = 1;
-    
-    private int _currentPlayerSkin;
-
-    private void Start()
+    private void Update()
     {
-        int currentPlayerSkin = SkinsMenu.CurrentPlayerColor;
-
-        _snakeCell.material.color = _payerMaterialsList.playerColors[currentPlayerSkin];
-        
-        transform.DOLocalRotate(new Vector3(0, 360, 0), _duration).
-            SetLoops(-1, LoopType.Incremental).SetEase(Ease.Linear).SetLink(gameObject);
+        transform.Rotate(180 * Time.deltaTime, 0f, 0f);
     }
 }

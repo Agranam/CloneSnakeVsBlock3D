@@ -45,9 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e62b616c687e7f748959cbb77fd76049, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _snakeCell: {fileID: 9159034518603386685}
-  _payerMaterialsList: {fileID: 11400000, guid: 6c658cb6e6d547242a63999e254e04bd, type: 2}
-  _duration: 1
 --- !u!1001 &7555625102797689785
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -146,10 +143,5 @@ SphereCollider:
 --- !u!4 &8020982965548528722 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e4b5e273304cfb04cb16020178015e10, type: 3}
-  m_PrefabInstance: {fileID: 7555625102797689785}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &9159034518603386685 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: e4b5e273304cfb04cb16020178015e10, type: 3}
   m_PrefabInstance: {fileID: 7555625102797689785}
   m_PrefabAsset: {fileID: 0}

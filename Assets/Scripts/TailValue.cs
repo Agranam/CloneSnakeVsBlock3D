@@ -4,6 +4,7 @@ using UnityEngine;
 public class TailValue : MonoBehaviour
 {
     [SerializeField] private TextMeshPro _tailSizeCellTextMP;
+    [SerializeField] private TextMeshProUGUI _currentNumberOfCells;
 
     public void TextEnabled(bool isActive)
     {
@@ -12,6 +13,7 @@ public class TailValue : MonoBehaviour
     
     public void UpdateText(int numberOfCells)
     {
+        _currentNumberOfCells.text = numberOfCells.ToString();
         _tailSizeCellTextMP.text = numberOfCells.ToString();
     }
 }

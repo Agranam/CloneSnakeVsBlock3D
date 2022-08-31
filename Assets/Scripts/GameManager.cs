@@ -10,7 +10,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerSaveData _playerSaveData;
     [SerializeField] private GameUI _gameUI;
     [SerializeField] private EndMenu _endMenu;
-
+    [SerializeField] private SoundsEffects _soundsEffects;
+    
     private GameObject _createdLevel;
 
     private void Awake()
@@ -25,8 +26,9 @@ public class GameManager : MonoBehaviour
         {
             DeleteLevel();
         }
+        _soundsEffects.PlaySoundEffect(5);
         _createdLevel = new GameObject("GameLevel" + CurrentLevel);
-        _gameUI.gameObject.SetActive(true);
+        //_gameUI.gameObject.SetActive(true);
         UpdateLevel();
         _levelManager.GenerateLevel(_createdLevel.transform);
         _playerMovement.SetState(PlayerState.MovingInGame);
@@ -34,23 +36,28 @@ public class GameManager : MonoBehaviour
 
     public void LevelComplete()
     {
+        _soundsEffects.PlaySoundEffect(6);
         CurrentLevel++;
         UpdateLevel();
         _playerMovement.SetState(PlayerState.MovingInBackground);
         _endMenu.gameObject.SetActive(true);
-        _endMenu.ShowMenu(false);
+        _endMenu.ShowEndMenu(false);
         DeleteLevel();
     }
     
     public void LevelLost()
     {
+        _soundsEffects.PlaySoundEffect(4);
         _endMenu.gameObject.SetActive(true);
-        _endMenu.ShowMenu(true);
+        _endMenu.ShowEndMenu(true);
     }
 
     public void Restart()
     {
         DeleteLevel();
+        FinishLevel finishLevel = FindObjectOfType<FinishLevel>();
+        if(finishLevel)
+            Destroy(finishLevel.gameObject);
         StartGame();
     }
 
@@ -60,7 +67,10 @@ public class GameManager : MonoBehaviour
         {
             DeleteLevel();
         }
-        Debug.Log("Exit to Menu");
+        FinishLevel finishLevel = FindObjectOfType<FinishLevel>();
+        if(finishLevel)
+            Destroy(finishLevel.gameObject);
+
         _playerMovement.SetState(PlayerState.MovingInBackground);
     }
 
@@ -78,6 +88,6 @@ public class GameManager : MonoBehaviour
     private void UpdateLevel()
     {
         _playerSaveData.LevelWriteData(CurrentLevel);
-        _gameUI.UpdateText(CurrentLevel);
+        _gameUI.UpdateLevelText(CurrentLevel);
     }
 }

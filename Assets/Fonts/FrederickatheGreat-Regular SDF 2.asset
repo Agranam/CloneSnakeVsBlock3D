@@ -56,7 +56,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: FrederickatheGreat-Regular SDF Material
   m_Shader: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - UNDERLAY_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -114,12 +115,12 @@ Material:
     - _OutlineSoftness: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
-    - _OutlineWidth: 0.034
+    - _OutlineWidth: 0.061
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
     - _ScaleRatioA: 0.8333333
     - _ScaleRatioB: 0.6770833
-    - _ScaleRatioC: 0.5549863
+    - _ScaleRatioC: 0.57379943
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
@@ -134,7 +135,7 @@ Material:
     - _TextureWidth: 512
     - _UnderlayDilate: 1
     - _UnderlayOffsetX: 0.18
-    - _UnderlayOffsetY: -0.22
+    - _UnderlayOffsetY: 0.02
     - _UnderlaySoftness: 0
     - _VertexOffsetX: 0
     - _VertexOffsetY: 0
@@ -150,7 +151,7 @@ Material:
     - _ReflectFaceColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectOutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
-    - _UnderlayColor: {r: 0, g: 0.036952592, b: 0.6226415, a: 0.5}
+    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &11400000
 MonoBehaviour:

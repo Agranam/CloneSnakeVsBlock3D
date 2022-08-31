@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SaveLoadSystem
 {
@@ -8,15 +7,13 @@ namespace SaveLoadSystem
         
         private SkinsData _mySkinsData = new SkinsData();
         public bool IsCreatedSave { get; private set; }
+        public static int CurrentPlaygroundMaterial { get; private set; }
 
         private void Awake()
         {
             VerifyRead();
-        }
-
-        private void Start()
-        {
-            
+            CurrentPlaygroundReadData(out int currentPlaygroundMaterial);
+            CurrentPlaygroundMaterial = currentPlaygroundMaterial;
         }
 
         public void OpenSkinsWriteData(bool[] openSkins)
@@ -72,6 +69,7 @@ namespace SaveLoadSystem
         public void CurrentPlaygroundWriteData(int currentPlayground)
         {
             _mySkinsData.CurrentPlayground = currentPlayground;
+            CurrentPlaygroundMaterial = currentPlayground;
             SaveSave();
         }
         public void CurrentPlaygroundReadData(out int currentPlayground)

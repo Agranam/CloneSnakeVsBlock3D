@@ -86,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
     {
         CurrentPlayerState = currentState;
     }
-
+    
     private void PcControl()
     {
         if (Input.GetMouseButtonDown(0))
@@ -109,7 +109,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (CurrentPlayerState == PlayerState.Stay) return;
         
-        if (Mathf.Abs(_sidewaysSpeed) > 4) _sidewaysSpeed = 4 * Mathf.Sign(_sidewaysSpeed);
+        if (Mathf.Abs(_sidewaysSpeed) > 4) 
+            _sidewaysSpeed = 4 * Mathf.Sign(_sidewaysSpeed);
+        
         _rigidbody.velocity = new Vector3(_sidewaysSpeed * 5, 0f, _currentSpeedMoving);
         _sidewaysSpeed = 0;
     }

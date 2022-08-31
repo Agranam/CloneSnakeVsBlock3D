@@ -9,6 +9,6 @@ namespace ScriptableObjects
         public Color[] playerColors;
         public Material[] floorMaterials;
         public Material[] wallMaterials;
-        public Image[] backgroundImages;
+        public Sprite[] backgroundImages;
     }
 }

@@ -153,7 +153,7 @@ MonoBehaviour:
   - {r: 0.63529414, g: 0.25490198, b: 0.15294118, a: 1}
   _textBlockCount: {fileID: 7976111198593414444}
   _renderer: {fileID: 8750849501241364805}
-  _playerMovement: {fileID: 0}
+  _prefabFX: {fileID: 7928401053974533476, guid: a4a3ccb9d172e364c8c916928ecfc72a, type: 3}
 --- !u!1 &7976111198593414447
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,7 +212,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2088947824898720058, guid: dd290936d3db5734780322600de4e53b, type: 2}
+  - {fileID: -2088947824898720058, guid: 6037bfc15af433646b41ef982971a133, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -256,8 +256,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 3
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dd290936d3db5734780322600de4e53b, type: 2}
-  m_sharedMaterial: {fileID: -2088947824898720058, guid: dd290936d3db5734780322600de4e53b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6037bfc15af433646b41ef982971a133, type: 2}
+  m_sharedMaterial: {fileID: -2088947824898720058, guid: 6037bfc15af433646b41ef982971a133, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

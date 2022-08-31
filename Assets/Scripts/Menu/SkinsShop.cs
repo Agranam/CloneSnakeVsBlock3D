@@ -10,6 +10,7 @@ namespace Menu
         [SerializeField] private SkinsSaveData _skinsSaveData;
         [SerializeField] private TailManagment _tailManagment;
         [SerializeField] private GameObject _notEnoughSnakeCells;
+        [SerializeField] private TextMeshProUGUI _numberOfCells;
         [SerializeField] private TextMeshProUGUI[] _priceSkinsTextMP;
         [SerializeField] private TextMeshProUGUI[] _pricePlaygroundsTextMP;
         [SerializeField] private int[] _skinsPrice;
@@ -31,6 +32,7 @@ namespace Menu
             {
                 ReadSkinsSaveData();
             }
+            SetValue();
         }
 
         private void ReadSkinsSaveData()
@@ -39,6 +41,11 @@ namespace Menu
             _skinsSaveData.PriceSkinsReadData(out _skinsPrice);
             _skinsSaveData.OpenPlaygroundsReadData(out _openPlaygrounds);
             _skinsSaveData.PricePlaygroundsReadData(out _playgroundsPrice);
+            UpdateNumberOfCellsText();
+        }
+
+        private void SetValue()
+        {
             for (int i = 0; i < _priceSkinsTextMP.Length; i++)
             {
                 _priceSkinsTextMP[i].text = _skinsPrice[i].ToString();
@@ -50,7 +57,7 @@ namespace Menu
             }
             for (int i = 0; i < _pricePlaygroundsTextMP.Length; i++)
             {
-                _pricePlaygroundsTextMP[i].text = _skinsPrice[i].ToString();
+                _pricePlaygroundsTextMP[i].text = _playgroundsPrice[i].ToString();
                 if (_openPlaygrounds[i])
                 {
                     _pricePlaygroundsTextMP[i].enabled = false;
@@ -58,13 +65,14 @@ namespace Menu
                 }
             }
         }
-        
+
         public void SkinsSpendCell(int currentIndex)
         {
             if (_tailManagment.NumberOfCells > 0)
             {
                 _tailManagment.FastDeleteCell();
                 _skinsPrice[currentIndex]--;
+                UpdateNumberOfCellsText();
                 _priceSkinsTextMP[currentIndex].text = _skinsPrice[currentIndex].ToString();
                 if (_skinsPrice[currentIndex] == 0)
                 {
@@ -87,8 +95,9 @@ namespace Menu
             {
                 _tailManagment.FastDeleteCell();
                 _playgroundsPrice[currentIndex]--;
+                UpdateNumberOfCellsText();
                 _pricePlaygroundsTextMP[currentIndex].text = _playgroundsPrice[currentIndex].ToString();
-                if (_skinsPrice[currentIndex] == 0)
+                if (_playgroundsPrice[currentIndex] == 0)
                 {
                     _pricePlaygroundsTextMP[currentIndex].enabled = false;
                     _pricePlaygroundsTextMP[currentIndex].GetComponent<Button>().enabled = false;
@@ -102,6 +111,11 @@ namespace Menu
             {
                 _notEnoughSnakeCells.SetActive(true);
             }
+        }
+
+        public void UpdateNumberOfCellsText()
+        {
+            _numberOfCells.text = _tailManagment.NumberOfCells.ToString();
         }
     }
 }

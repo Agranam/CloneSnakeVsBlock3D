@@ -25,7 +25,7 @@ public class RowBlockGenerator : MonoBehaviour
     {
         for (int i = 0; i < 6; i++)
         {
-            _blockValue.Add(Random.Range(1, 5));
+            _blockValue.Add(Random.Range(1, 51));
         }
 
         ChangeDifficulty(lootValue, 0);

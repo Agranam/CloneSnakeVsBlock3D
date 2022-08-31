@@ -25,7 +25,7 @@ public class LevelBlockGenerator : MonoBehaviour
         }
 
         Vector3 finishPosition = new Vector3(0f, 0f, offset + (numberOfRows * rowSpacing));
-        Instantiate(_finish, finishPosition, Quaternion.identity, currentLevel);
+        Instantiate(_finish, finishPosition, Quaternion.identity);
     }
     public void DeleteBlocks()
     {

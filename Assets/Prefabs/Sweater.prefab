@@ -25,17 +25,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9142552596891633597}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1.7399999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9142552597279437953}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.9899993, y: 0.65}
+  m_AnchoredPosition: {x: 1.9899993, y: 1.24}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &9142552596891633586
@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2088947824898720058, guid: dd290936d3db5734780322600de4e53b, type: 2}
+  - {fileID: -2088947824898720058, guid: 6037bfc15af433646b41ef982971a133, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -102,8 +102,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 10
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dd290936d3db5734780322600de4e53b, type: 2}
-  m_sharedMaterial: {fileID: -2088947824898720058, guid: dd290936d3db5734780322600de4e53b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6037bfc15af433646b41ef982971a133, type: 2}
+  m_sharedMaterial: {fileID: -2088947824898720058, guid: 6037bfc15af433646b41ef982971a133, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -127,8 +127,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12
-  m_fontSizeBase: 12
+  m_fontSize: 16
+  m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -234,11 +234,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _minValue: 6
   _maxValue: 10
-  _color1: {r: 0.45882353, g: 0.58431375, b: 0.7921569, a: 1}
-  _color2: {r: 0.19607843, g: 0.40784314, b: 0.75686276, a: 1}
+  _color1: {r: 0.36112493, g: 0.45071828, b: 0.6037736, a: 1}
+  _color2: {r: 0.13745102, g: 0.3206698, b: 0.6226415, a: 1}
   _textCellsCount: {fileID: 9142552596891633587}
   _renderer: {fileID: 7575417979075125715}
   _numberOfCells: 6
+  _prefabFX: {fileID: 7433592333935514494, guid: f6c9eb690b11a3b4285907e5caf197a7, type: 3}
 --- !u!1001 &9142552597079784791
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -252,15 +253,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b0d61a1054fa790449a02c93e7fee061, type: 3}
       propertyPath: m_LocalScale.x
-      value: 70
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b0d61a1054fa790449a02c93e7fee061, type: 3}
       propertyPath: m_LocalScale.y
-      value: 70
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b0d61a1054fa790449a02c93e7fee061, type: 3}
       propertyPath: m_LocalScale.z
-      value: 70
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b0d61a1054fa790449a02c93e7fee061, type: 3}
       propertyPath: m_LocalPosition.x

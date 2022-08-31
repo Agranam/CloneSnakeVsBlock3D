@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Timeline;
 using UnityEngine.UI;
 
 namespace Menu
@@ -24,13 +25,32 @@ namespace Menu
             SetValue(0);
         }
 
-        public void ShowMenu(bool isRestart)
+        public void ShowEndMenu(bool isRestart)
         {
             _menuPanel.DOFillAmount(1, _duration);
             if (isRestart)
                 Restart();
             else
                 Continue();
+        }
+
+        public void HideEndMenu()
+        {
+            Sequence sequence = DOTween.Sequence();
+            sequence.AppendInterval(0);
+            foreach (var image in _images)
+            {
+                if (image)
+                    sequence.Join(image.DOFade(0, 0.1f));
+            }
+            foreach (var textMeshProUGUI in _textMeshProUGUI)
+            {
+                if (textMeshProUGUI)
+                    sequence.Join(textMeshProUGUI.DOFade(0, 0.1f));
+            }
+            sequence.Append(_menuPanel.DOFillAmount(0, _duration));
+
+            Invoke(nameof(EndMenuDisabled), 1);
         }
         
         private void Restart()
@@ -39,7 +59,7 @@ namespace Menu
             _restartButton.SetActive(true);
             _menuButton.SetActive(true);
             _continueButton.SetActive(false);
-            ChangeArrayFade(1, _duration);
+            ShowEndMenu(_duration);
         }
 
         private void Continue()
@@ -49,10 +69,10 @@ namespace Menu
             _menuButton.SetActive(true);
             _restartButton.SetActive(false);
             
-            ChangeArrayFade(1, _duration);
+            ShowEndMenu(_duration);
         }
         
-        private void ChangeArrayFade(float value, int duration)
+        private void ShowEndMenu(int duration)
         {
             Sequence sequence = DOTween.Sequence();
             sequence.AppendInterval(duration);
@@ -60,12 +80,12 @@ namespace Menu
             foreach (var image in _images)
             {
                 if (image)
-                    sequence.Join(image.DOFade(value, duration));
+                    sequence.Join(image.DOFade(1, duration));
             }
             foreach (var textMeshProUGUI in _textMeshProUGUI)
             {
                 if (textMeshProUGUI)
-                    sequence.Join(textMeshProUGUI.DOFade(value, duration));
+                    sequence.Join(textMeshProUGUI.DOFade(1, duration));
             }
         }
         
@@ -84,6 +104,11 @@ namespace Menu
                 startImageColor.a = value;
                 image.color = startImageColor;
             }
+        }
+
+        private void EndMenuDisabled()
+        {
+            gameObject.SetActive(false);
         }
     }
 }

@@ -2,25 +2,24 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Menu;
 using SaveLoadSystem;
-using Unity.VisualScripting;
 using UnityEngine;
-using Sequence = DG.Tweening.Sequence;
 
 public class TailManagment : MonoBehaviour
 {
-    public float AnimationDuration = 0.2f;
-    public int NumberOfCells;
-    [SerializeField] private PlayerSaveData _playerSaveData;
-    [SerializeField] private Transform _snakeCellPrefab;
-    [SerializeField] private Transform _snakeHead;
-    [SerializeField] private PlayerMovement _playerMovement;
-    [SerializeField] private TailValue _tailValue;
-    [SerializeField] private SoundsEffects _soundsEffects;
-    [SerializeField] private GameManager _gameManager;
+    public int NumberOfCells { get; private set; }
+    [SerializeField] private float durationAnimation = 2f;
+    [SerializeField] private PlayerSaveData playerSaveData;
+    [SerializeField] private Transform snakeCellPrefab;
+    [SerializeField] private Transform snakeHead;
+    [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private TailValue tailValue;
+    [SerializeField] private SoundsEffects soundsEffects;
+    [SerializeField] private GameManager gameManager;
 
+    private bool _isDied = false;
     private float _cellDiameter = 1;
     private float _distance;
-    public bool _isDied = false;
+    private float _currentDurationAnimation;
     private Transform _removableCell;
     private Block _currentBlock;
     private List<Transform> _snakeCells = new List<Transform>();
@@ -28,8 +27,9 @@ public class TailManagment : MonoBehaviour
 
     private void Awake()
     {
-        _positionsCells.Add(_snakeHead.position);
-        _playerSaveData.TailLenghtReadData(out NumberOfCells);
+        _positionsCells.Add(snakeHead.position);
+        playerSaveData.TailLenghtReadData(out int numberOfCells);
+        NumberOfCells = numberOfCells;
     }
 
     private void Start()
@@ -40,10 +40,10 @@ public class TailManagment : MonoBehaviour
 
     private void Update()
     {
-        _distance = (_snakeHead.position - _positionsCells[0]).magnitude;
+        _distance = (snakeHead.position - _positionsCells[0]).magnitude;
         if (_distance > _cellDiameter)
             Position();
-        if (_playerMovement.CurrentPlayerState is PlayerState.MovingInGame or PlayerState.MovingInBackground)
+        if (playerMovement.CurrentPlayerState is PlayerState.MovingInGame or PlayerState.MovingInBackground)
         {
             MovingCircles();
         }
@@ -61,7 +61,7 @@ public class TailManagment : MonoBehaviour
 
     private void Position()
     {
-        Vector3 direction = (_snakeHead.position - _positionsCells[0]).normalized;
+        Vector3 direction = (snakeHead.position - _positionsCells[0]).normalized;
         Vector3 position = _positionsCells[0] + direction * _cellDiameter;
         _positionsCells.Insert(0, position);
         _positionsCells.RemoveAt(_positionsCells.Count - 1);
@@ -91,7 +91,7 @@ public class TailManagment : MonoBehaviour
         {
             Quaternion setRotation = Quaternion.Euler
                 (Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
-            Transform circle = Instantiate(_snakeCellPrefab, _positionsCells[^1],
+            Transform circle = Instantiate(snakeCellPrefab, _positionsCells[^1],
                 setRotation, transform);
             _snakeCells.Add(circle);
             _positionsCells.Add(circle.position);
@@ -102,18 +102,19 @@ public class TailManagment : MonoBehaviour
     private void UpdateTailLenght()
     {
         NumberOfCells = _snakeCells.Count;
-        _playerSaveData.TailLenghtWriteData(NumberOfCells);
-        _tailValue.UpdateText(NumberOfCells);
+        playerSaveData.TailLenghtWriteData(NumberOfCells);
+        tailValue.UpdateText(NumberOfCells);
         if (NumberOfCells == 0 && _isDied)
         {
-            _playerMovement.SetState(PlayerState.Died);
-            _gameManager.LevelLost();
+            playerMovement.SetState(PlayerState.Died);
+            gameManager.LevelLost();
             _isDied = false;
         }
     }
     
     public void RemoveCell(int numberOfRemoveCell, Vector3 targetPosition)
     {
+        
         int cellsCount;
         if (numberOfRemoveCell > _snakeCells.Count)
         {
@@ -131,33 +132,40 @@ public class TailManagment : MonoBehaviour
         {
             DOTween.SetTweensCapacity(400, 100);
         }
-        
+
+        CalculateDurationAnimation(cellsCount);
         Sequence sequence = DOTween.Sequence();
         for (int i = 0; i < cellsCount; i++)
         {
-            sequence.Append(_snakeCells[i].DOJump(targetPosition, 2, 1,AnimationDuration));
+            sequence.Append(_snakeCells[i].DOJump(targetPosition, 2, 1,_currentDurationAnimation));
             sequence.AppendCallback(DeleteCell);
             sequence.AppendCallback(UpdateTailLenght);
-            sequence.AppendInterval(AnimationDuration);
+            sequence.AppendInterval(_currentDurationAnimation);
         }
+    }
+
+    private void CalculateDurationAnimation(float numberOfBlock)
+    {
+        float t = Mathf.Abs((numberOfBlock / 50) - 1);
+        _currentDurationAnimation = Mathf.Lerp(0.03f, durationAnimation, t);
     }
     
     private void DeleteCell()
     {
-        _soundsEffects.Jump();
+        soundsEffects.PlaySoundEffect(0);
         _removableCell = _snakeCells[0];
-        Invoke(nameof(DestroyCell), AnimationDuration);
+        Invoke(nameof(DestroyCell), _currentDurationAnimation);
         _currentBlock.SubtractBlockCount();
         _snakeCells.RemoveAt(0);
         _positionsCells.RemoveAt(_positionsCells.Count - 1);
         for (int i = 0; i < _snakeCells.Count; i++)
         {
-            _snakeCells[i].DOMove(_positionsCells[i + 1], AnimationDuration, false);
+            _snakeCells[i].DOMove(_positionsCells[i + 1], _currentDurationAnimation, false);
         }
 
         if (_currentBlock.BlockCount == 0)
         {
-            Invoke(nameof(DestroyBlock), AnimationDuration);
+            Invoke(nameof(DestroyBlock), _currentDurationAnimation);
         }
     }
 
