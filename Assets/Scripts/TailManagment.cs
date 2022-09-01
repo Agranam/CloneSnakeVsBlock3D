@@ -7,14 +7,14 @@ using UnityEngine;
 public class TailManagment : MonoBehaviour
 {
     public int NumberOfCells { get; private set; }
-    [SerializeField] private float durationAnimation = 2f;
-    [SerializeField] private PlayerSaveData playerSaveData;
-    [SerializeField] private Transform snakeCellPrefab;
-    [SerializeField] private Transform snakeHead;
-    [SerializeField] private PlayerMovement playerMovement;
-    [SerializeField] private TailValue tailValue;
-    [SerializeField] private SoundsEffects soundsEffects;
-    [SerializeField] private GameManager gameManager;
+    [SerializeField] private float _durationAnimation = 2f;
+    [SerializeField] private PlayerSaveData _playerSaveData;
+    [SerializeField] private Transform _snakeCellPrefab;
+    [SerializeField] private Transform _snakeHead;
+    [SerializeField] private PlayerMovement _playerMovement;
+    [SerializeField] private TailValue _tailValue;
+    [SerializeField] private SoundsEffects _soundsEffects;
+    [SerializeField] private GameManager _gameManager;
 
     private bool _isDied = false;
     private float _cellDiameter = 1;
@@ -27,8 +27,8 @@ public class TailManagment : MonoBehaviour
 
     private void Awake()
     {
-        _positionsCells.Add(snakeHead.position);
-        playerSaveData.TailLenghtReadData(out int numberOfCells);
+        _positionsCells.Add(_snakeHead.position);
+        _playerSaveData.TailLenghtReadData(out int numberOfCells);
         NumberOfCells = numberOfCells;
     }
 
@@ -40,10 +40,10 @@ public class TailManagment : MonoBehaviour
 
     private void Update()
     {
-        _distance = (snakeHead.position - _positionsCells[0]).magnitude;
+        _distance = (_snakeHead.position - _positionsCells[0]).magnitude;
         if (_distance > _cellDiameter)
             Position();
-        if (playerMovement.CurrentPlayerState is PlayerState.MovingInGame or PlayerState.MovingInBackground)
+        if (_playerMovement.CurrentPlayerState is PlayerState.MovingInGame or PlayerState.MovingInBackground)
         {
             MovingCircles();
         }
@@ -61,7 +61,7 @@ public class TailManagment : MonoBehaviour
 
     private void Position()
     {
-        Vector3 direction = (snakeHead.position - _positionsCells[0]).normalized;
+        Vector3 direction = (_snakeHead.position - _positionsCells[0]).normalized;
         Vector3 position = _positionsCells[0] + direction * _cellDiameter;
         _positionsCells.Insert(0, position);
         _positionsCells.RemoveAt(_positionsCells.Count - 1);
@@ -91,7 +91,7 @@ public class TailManagment : MonoBehaviour
         {
             Quaternion setRotation = Quaternion.Euler
                 (Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
-            Transform circle = Instantiate(snakeCellPrefab, _positionsCells[^1],
+            Transform circle = Instantiate(_snakeCellPrefab, _positionsCells[^1],
                 setRotation, transform);
             _snakeCells.Add(circle);
             _positionsCells.Add(circle.position);
@@ -102,12 +102,12 @@ public class TailManagment : MonoBehaviour
     private void UpdateTailLenght()
     {
         NumberOfCells = _snakeCells.Count;
-        playerSaveData.TailLenghtWriteData(NumberOfCells);
-        tailValue.UpdateText(NumberOfCells);
+        //playerSaveData.TailLenghtWriteData(NumberOfCells);
+        _tailValue.UpdateText(NumberOfCells);
         if (NumberOfCells == 0 && _isDied)
         {
-            playerMovement.SetState(PlayerState.Died);
-            gameManager.LevelLost();
+            _playerMovement.SetState(PlayerState.Died);
+            _gameManager.LevelLost();
             _isDied = false;
         }
     }
@@ -147,12 +147,12 @@ public class TailManagment : MonoBehaviour
     private void CalculateDurationAnimation(float numberOfBlock)
     {
         float t = Mathf.Abs((numberOfBlock / 50) - 1);
-        _currentDurationAnimation = Mathf.Lerp(0.03f, durationAnimation, t);
+        _currentDurationAnimation = Mathf.Lerp(0.03f, _durationAnimation, t);
     }
     
     private void DeleteCell()
     {
-        soundsEffects.PlaySoundEffect(0);
+        _soundsEffects.PlaySoundEffect(0);
         _removableCell = _snakeCells[0];
         Invoke(nameof(DestroyCell), _currentDurationAnimation);
         _currentBlock.SubtractBlockCount();
@@ -175,6 +175,7 @@ public class TailManagment : MonoBehaviour
         _snakeCells.RemoveAt(0);
         _positionsCells.RemoveAt(_positionsCells.Count - 1);
         UpdateTailLenght();
+        _playerSaveData.TailLenghtWriteData(NumberOfCells);
     }
     
     private void DestroyBlock()

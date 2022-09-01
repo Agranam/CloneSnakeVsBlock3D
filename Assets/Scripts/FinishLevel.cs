@@ -19,8 +19,8 @@ public class FinishLevel : MonoBehaviour
     {
         if (!other.GetComponent<PlayerMovement>())
             return;
-        
-        _gameManager.LevelComplete();
+        int numberOfCells = other.GetComponentInChildren<TailManagment>().NumberOfCells;
+        _gameManager.LevelComplete(numberOfCells);
         Instantiate(_prefabFX, transform.position, Quaternion.identity);
         StartCoroutine(Dissolving(0.5f));
     }

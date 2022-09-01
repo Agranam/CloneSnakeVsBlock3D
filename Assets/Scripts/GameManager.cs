@@ -28,17 +28,17 @@ public class GameManager : MonoBehaviour
         }
         _soundsEffects.PlaySoundEffect(5);
         _createdLevel = new GameObject("GameLevel" + CurrentLevel);
-        //_gameUI.gameObject.SetActive(true);
         UpdateLevel();
         _levelManager.GenerateLevel(_createdLevel.transform);
         _playerMovement.SetState(PlayerState.MovingInGame);
     }
 
-    public void LevelComplete()
+    public void LevelComplete(int numberOfCells)
     {
         _soundsEffects.PlaySoundEffect(6);
         CurrentLevel++;
         UpdateLevel();
+        _playerSaveData.TailLenghtWriteData(numberOfCells);
         _playerMovement.SetState(PlayerState.MovingInBackground);
         _endMenu.gameObject.SetActive(true);
         _endMenu.ShowEndMenu(false);
