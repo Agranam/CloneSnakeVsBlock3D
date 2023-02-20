@@ -1,3 +1,4 @@
+using Menu;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
@@ -8,14 +9,22 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private LevelLootGenerator _levelLootGenerator;
     [SerializeField] private LevelBlockGenerator _levelBlockGenerator;
     [SerializeField] private Transform _playerTransform;
-
+    [SerializeField] private GameUI _gameUI;
+    
     private int _numberOfRows;
     
-    public void GenerateLevel()
+    public void GenerateLevel(Transform currentLevel)
     {
         _numberOfRows = Random.Range(_minNumberOfRows, _maxNumberOfRows);
         int generationPosition = (int)_playerTransform.position.z + _offsetPosition;
-        _levelLootGenerator.LootGenerator(_numberOfRows, generationPosition, _rowSpacing);
-        _levelBlockGenerator.LevelGenerator(_numberOfRows, generationPosition, _rowSpacing);
+        _levelLootGenerator.GenerateLoot(currentLevel, _numberOfRows, generationPosition, _rowSpacing);
+        _levelBlockGenerator.GenerateBlocks(currentLevel, _numberOfRows, generationPosition, _rowSpacing);
+        _gameUI.StartLevel(generationPosition, generationPosition + (_rowSpacing * (_numberOfRows + 1)));
+    }
+
+    public void DeleteLevel()
+    {
+        _levelLootGenerator.DeleteLoot();
+        _levelBlockGenerator.DeleteBlocks();
     }
 }

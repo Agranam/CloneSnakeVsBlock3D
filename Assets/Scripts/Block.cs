@@ -1,20 +1,23 @@
-using System;
+using Menu;
 using TMPro;
 using UnityEngine;
 
 public class Block : MonoBehaviour
 {
-    public int BlockCount { get; private set; }
     [SerializeField] private Color[] _colors;
     [SerializeField] private TextMeshPro _textBlockCount;
     [SerializeField] private Renderer _renderer;
+    [SerializeField] private GameObject _prefabFX;
     
-    [SerializeField] private PlayerMovement _playerMovement;
-
-    public bool _isActive { get; private set; } = false;
+    private PlayerMovement _playerMovement;
+    private SoundsEffects _soundsEffects;
+    private Color _currentColor;
+    public int BlockCount { get; private set; }
+    public bool IsActive { get; private set; } = false;
     
     private void Start()
     {
+        _soundsEffects = FindObjectOfType<SoundsEffects>();
         UpdateProperties();
     }
 
@@ -25,7 +28,7 @@ public class Block : MonoBehaviour
     public void SubtractBlockCount()
     {
         BlockCount -= 1;
-        UpdateProperties();
+        UpdateTextValue();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -36,19 +39,23 @@ public class Block : MonoBehaviour
             DisabledBlocks();
             _playerMovement = playerMovement;
             _playerMovement.SetState(PlayerState.Stay);
-            TailMovement tailMovement = collision.collider.GetComponentInChildren<TailMovement>();
-            tailMovement.SelectBlock(this);
-            tailMovement.NormalizePosition();
-            tailMovement.RemoveCell(BlockCount, _renderer.transform.position);
-            float delay = tailMovement.AnimationDuration * 2;
-            Invoke("DestroyBlock", BlockCount * delay);
+            TailManagment tailManagment = collision.collider.GetComponentInChildren<TailManagment>();
+            
+            DeleteTailCell(tailManagment);
         }
+    }
+
+    private void DeleteTailCell(TailManagment tailManagment)
+    {
+        tailManagment.SelectBlock(this);
+        tailManagment.NormalizePosition();
+        tailManagment.RemoveCell(BlockCount, _renderer.transform.position);
     }
 
     private void DisabledBlocks()
     {
         RowBlockGenerator rowBlockGenerator = GetComponentInParent<RowBlockGenerator>();
-        _isActive = true;
+        IsActive = true;
         rowBlockGenerator.DisabledBlock();
     }
 
@@ -76,19 +83,20 @@ public class Block : MonoBehaviour
 
     private void SetColor(Color color1, Color color2, float value)
     {
-        float mediumColor = Mathf.InverseLerp(0f, 10f, value);
-        _renderer.material.color = Color.Lerp(color1, color2, mediumColor);
+        float lerpColor = Mathf.InverseLerp(0f, 10f, value);
+        _currentColor = Color.Lerp(color1, color2, lerpColor);
+        _renderer.material.color = _currentColor;
     }
     
-    private void DestroyBlock()
-    {
-        Destroy(gameObject);
-    }
-
     private void OnDestroy()
     {
-        if (_playerMovement)
+        if (_playerMovement && _playerMovement.CurrentPlayerState == PlayerState.Stay)
+        {
             _playerMovement.SetState(PlayerState.MovingInGame);
+            _soundsEffects.PlaySoundEffect(3);
+            GameObject effect = Instantiate(_prefabFX, _renderer.transform.position, Quaternion.identity);
+            effect.GetComponent<Renderer>().material.color = _currentColor;
+        }
     }
 
     private void UpdateTextValue()
@@ -96,7 +104,6 @@ public class Block : MonoBehaviour
         _textBlockCount.text = BlockCount.ToString();
     }
     
-    [ContextMenu("Update properties")]
     private void UpdateProperties()
     {
         UpdateTextValue();

@@ -25,17 +25,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7534131104249899599}
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7534131104264279383}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.03, y: 0.76}
+  m_AnchoredPosition: {x: 2.03, y: 1.441}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &7534131104249899596
@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2088947824898720058, guid: dd290936d3db5734780322600de4e53b, type: 2}
+  - {fileID: -2088947824898720058, guid: 6037bfc15af433646b41ef982971a133, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -102,8 +102,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dd290936d3db5734780322600de4e53b, type: 2}
-  m_sharedMaterial: {fileID: -2088947824898720058, guid: dd290936d3db5734780322600de4e53b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6037bfc15af433646b41ef982971a133, type: 2}
+  m_sharedMaterial: {fileID: -2088947824898720058, guid: 6037bfc15af433646b41ef982971a133, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -127,8 +127,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12
-  m_fontSizeBase: 12
+  m_fontSize: 18
+  m_fontSizeBase: 18
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -234,11 +234,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _minValue: 1
   _maxValue: 5
-  _color1: {r: 0.7254902, g: 0.93333334, b: 0.53333336, a: 1}
-  _color2: {r: 0.60784316, g: 0.91764706, b: 0.3254902, a: 1}
+  _color1: {r: 0.39530188, g: 0.5849056, b: 0.3719117, a: 1}
+  _color2: {r: 0.10106094, g: 0.5377358, b: 0.062904924, a: 1}
   _textCellsCount: {fileID: 7534131104249899597}
   _renderer: {fileID: 9173561907909255928}
   _numberOfCells: 1
+  _prefabFX: {fileID: 7433592333935514494, guid: f6c9eb690b11a3b4285907e5caf197a7, type: 3}
 --- !u!1001 &7534131103970295420
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -13,15 +13,24 @@ namespace Menu
         [SerializeField] private AudioClip[] _gameMusic;
         private List<AudioClip> _playMusic = new List<AudioClip>();
 
-        private float _musicValue;
+        private float _musicValue = 0.5f;
 
         private void Awake()
         {
-            _settingsSaveData.MusicReadData(out _musicValue);
         }
 
         private void Start()
         {
+            if (!_settingsSaveData.IsCreatedMusicSave)
+            {
+                _settingsSaveData.MusicWriteData(_musicValue);
+                _settingsSaveData.CreateMusicSave();
+            }
+            else
+            {
+                _settingsSaveData.MusicReadData(out _musicValue);
+            }
+
             addToList();
             SetMusicValue(_musicValue);
             _musicValeuSlider.value = _musicValue;

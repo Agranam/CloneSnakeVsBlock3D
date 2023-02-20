@@ -1,19 +1,15 @@
-﻿using System;
+﻿using Menu;
+using SaveLoadSystem;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private TailMovement tailMovement;
-
-    private void Update()
+    [SerializeField] private CustomizeMenu _customizeMenu;
+    [SerializeField] private SkinsSaveData _skinsSaveData;
+    
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            tailMovement.AddCell(1);
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            //tail.RemoveCircle();
-        }
+        _skinsSaveData.CurrentSkinReadData(out int currentPlayerColor);
+        _customizeMenu.SetSkin(currentPlayerColor);
     }
 }

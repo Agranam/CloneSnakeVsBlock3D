@@ -16,14 +16,19 @@ namespace Menu
         [SerializeField] private Transform _botPosition;
         [SerializeField] private Image _botKnittingNeedleImage;
         [SerializeField] private GameObject _menu;
-        [SerializeField] private TextMeshProUGUI[] _menuTextMP;
-        [SerializeField] private Image[] _menuImages;
+        [SerializeField] private Button[] _otherButtons;
+        [SerializeField] private TextMeshProUGUI[] _menuButtonsTextMP;
+        [SerializeField] private Image[] _menuImagesButtons;
         
+        private TextMeshProUGUI[] _menuTextMP;
+        private Image[] _menuImages;
         private Vector2 _originalImageSize;
         private Vector3 _originalKnittingNeedlePosition;
 
         private void Awake()
         {
+            _menuTextMP = _menu.GetComponentsInChildren<TextMeshProUGUI>();
+            _menuImages = _menu.GetComponentsInChildren<Image>();
             FastHideMenu();
             SavePositions();
             DisabledImage();
@@ -43,9 +48,22 @@ namespace Menu
 
         public void ShowMenu()
         {
+            foreach (var button in _otherButtons)
+            {
+                button.enabled = false;
+            }
             _menu.SetActive(true);
             var seq= DOTween.Sequence();
-            seq.AppendInterval(1);
+            for (int i = 0; i < _menuButtonsTextMP.Length; i++)
+            {
+                seq.Insert(0,_menuButtonsTextMP[i].DOFade(0, 1));
+            }
+            for (int i = 0; i < _menuImagesButtons.Length; i++)
+            {
+                seq.Join(_menuImagesButtons[i].DOFade(0, 1));
+            }
+
+            seq.AppendInterval(0);
             for (int i = 0; i < _menuTextMP.Length; i++)
             {
                 seq.Insert(1,_menuTextMP[i].DOFade(1, _duration + 1));
@@ -65,9 +83,12 @@ namespace Menu
                 startTextColor.a = 0;
                 textMeshProUGUI.color = startTextColor;
             }
-            Color startImageColor = _menuImages[0].color;
+
+            if (_menuImages.Length == 0) return;
+                
             foreach (var image in _menuImages)
             {
+                Color startImageColor = image.color;
                 startImageColor.a = 0;
                 image.color = startImageColor;
             }
@@ -100,14 +121,24 @@ namespace Menu
 
             seq.Join(_topKnittingNeedle.DOSizeDelta(_originalImageSize, _duration));
             seq.Join(_botKnittingNeedle.DOSizeDelta(_originalImageSize, _duration));
-            
+            seq.AppendInterval(0);
+
+            foreach (var menuText in _menuButtonsTextMP)
+            {
+                seq.Join(menuText.DOFade(1, 1));
+            }
+            foreach (var menuImage in _menuImagesButtons)
+            {
+                seq.Join(menuImage.DOFade(1, 1));
+            }
+
             Invoke(nameof(PlaySound), 1);
             Invoke(nameof(DisabledImage), _duration + 1);
         }
 
         private void PlaySound()
         {
-            _soundsEffects.OpenMenu();
+            _soundsEffects.PlaySoundEffect(1);
         }
         
         private void SavePositions()
@@ -120,6 +151,10 @@ namespace Menu
         {
             _botKnittingNeedleImage.enabled = false;
             _menu.SetActive(false);
+            foreach (var button in _otherButtons)
+            {
+                button.enabled = true;
+            }
         }
     }
 }
